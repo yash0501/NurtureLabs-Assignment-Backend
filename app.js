@@ -12,8 +12,10 @@ app.use(express.static("public"));
 const config = require("./config");
 
 const mongoose = require('mongoose');
-mongoose.connect(config.db.connection, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(config.db.connection, {useNewUrlParser: true, useUnifiedTopology: true,
+useFindAndModify:true})
 const User = require("./models/user_login");
+const Advisor = require("./models/advisor_register.js");
 
 app.get("/", (req, res)=>{
     res.send("Hello World");
@@ -25,38 +27,25 @@ app.get("/user/register", (req, res)=>{
 
 app.post("/user/register", async (req, res)=>{
     //console.log(req.body);
-    const newUser = new User(req.body);
-
     try {
+        const newUser = new User(req.body);
         await newUser.save();
-        res.send(newUser);
+        res.render("user_registered.ejs", {newUser});
     } catch(err){
         res.status(500).send(err);
     }
-    //console.log(newUser);
-    /*User.create(newUser)
-    .then((err, user)=>{
-        if(err){
-            console.log("This is error");
-            console.log(err);
-            res.redirect("/user/register");
-        }
-        else{
-            console.log("Inserted to db successfully")
-            console.log(user);
-            res.redirect("/user/register");
-        }
-    })*/
-    /*.then((user)=>{
-        console.log(user)
-        res.redirect("/user/register")
-    })
-    .catch((err)=>{
-        console.log(err)
-        res.redirect("/user/register")
-    })*/
-    
-    //res.redirect("/user/register");
+})
+
+app.get("/admin/advisor/", (req, res)=>{
+    res.render("user_registered.ejs");
+})
+
+app.post("/admin/advisor/", async (req, res)=>{
+    try{
+        
+    } catch {
+
+    }
 })
 
 app.listen(3000, ()=>{
